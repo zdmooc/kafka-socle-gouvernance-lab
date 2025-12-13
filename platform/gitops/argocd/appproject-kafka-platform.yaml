@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: kafka-platform
+  namespace: argocd
+spec:
+  description: Kafka platform (Strimzi) – socle
+  sourceRepos:
+    - '*'
+  destinations:
+    - namespace: kafka
+      server: https://kubernetes.default.svc
+    - namespace: kafka-apps
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

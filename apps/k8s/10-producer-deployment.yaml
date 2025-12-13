@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-producer
+  namespace: kafka-apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-producer
+  template:
+    metadata:
+      labels:
+        app: demo-producer
+    spec:
+      containers:
+        - name: producer
+          image: demo/python-producer:0.1.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: KAFKA_BOOTSTRAP
+              value: "socle-kafka-kafka-bootstrap.kafka.svc:9092"
+            - name: KAFKA_TOPIC
+              value: "demo.events.v1"
+            - name: SLEEP_SEC
+              value: "1"

@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kafka-alerts
+  namespace: kafka
+spec:
+  groups:
+    - name: kafka.rules
+      rules:
+        - alert: KafkaPodDown
+          expr: up{namespace="kafka",pod=~"socle-kafka-kafka-.*"} == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Kafka broker down"
+            description: "Un pod Kafka n'est pas up depuis 2 minutes."

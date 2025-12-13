@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kafka-smoke
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: kafka-cli
+          # Image Strimzi avec outils Kafka (tag à ajuster selon versions)
+          image: quay.io/strimzi/kafka:latest-kafka-4.1.1
+          command: ["/bin/bash","-lc"]
+          args:
+            - |
+              set -euo pipefail
+              BOOTSTRAP="socle-kafka-kafka-bootstrap:9092"
+              echo "Bootstrap=$BOOTSTRAP"
+              echo "List topics (should include __consumer_offsets etc.)"
+              bin/kafka-topics.sh --bootstrap-server "$BOOTSTRAP" --list || true
+
+              echo "Create topic if missing (idempotent-ish)"
+              bin/kafka-topics.sh --bootstrap-server "$BOOTSTRAP"                 --create --if-not-exists --topic demo.events.v1 --partitions 3 --replication-factor 1
+
+              echo "Produce 5 messages"
+              for i in $(seq 1 5); do
+                echo "msg-$i $(date -Is)" | bin/kafka-console-producer.sh --bootstrap-server "$BOOTSTRAP" --topic demo.events.v1
+              done
+
+              echo "Consume messages (timeout)"
+              timeout 10s bin/kafka-console-consumer.sh --bootstrap-server "$BOOTSTRAP" --topic demo.events.v1 --from-beginning || true
+              echo "OK"

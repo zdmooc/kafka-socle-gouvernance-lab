@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-consumer
+  namespace: kafka-apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-consumer
+  template:
+    metadata:
+      labels:
+        app: demo-consumer
+    spec:
+      containers:
+        - name: consumer
+          image: demo/python-consumer:0.1.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: KAFKA_BOOTSTRAP
+              value: "socle-kafka-kafka-bootstrap.kafka.svc:9092"
+            - name: KAFKA_TOPIC
+              value: "demo.events.v1"
+            - name: KAFKA_GROUP
+              value: "demo-app"

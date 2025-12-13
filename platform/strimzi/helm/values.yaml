@@ -1,0 +1,13 @@
+# Strimzi Helm values (socle)
+# - L'operator surveille par défaut son namespace.
+# - watchNamespaces permet d'ajouter des namespaces applicatifs (kafka-apps, team-*)
+# Référence: documentation Strimzi / helm chart (watchNamespaces).
+replicas: 1
+
+# Exemple: operator en ns 'kafka' + observation de 'kafka-apps'
+watchNamespaces:
+  - kafka-apps
+
+# Si vous voulez tout observer (cluster-wide), vous pouvez utiliser:
+# watchAnyNamespace: true
+# (à activer selon la politique sécurité/RBAC)

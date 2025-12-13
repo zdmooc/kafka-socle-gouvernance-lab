@@ -1,0 +1,40 @@
+# Exemple KafkaUser + ACLs (mTLS + ACL simple)
+# Source d'inspiration : exemple officiel Strimzi KafkaUser (ACL) – voir README (lien raw).
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaUser
+metadata:
+  name: demo-app
+  labels:
+    strimzi.io/cluster: socle-kafka
+spec:
+  authentication:
+    type: tls
+  authorization:
+    type: simple
+    acls:
+      # Consumer sur le topic
+      - resource:
+          type: topic
+          name: demo.events.v1
+          patternType: literal
+        operations:
+          - Describe
+          - Read
+        host: "*"
+      - resource:
+          type: group
+          name: demo-app
+          patternType: literal
+        operations:
+          - Read
+        host: "*"
+      # Producer sur le topic
+      - resource:
+          type: topic
+          name: demo.events.v1
+          patternType: literal
+        operations:
+          - Create
+          - Describe
+          - Write
+        host: "*"

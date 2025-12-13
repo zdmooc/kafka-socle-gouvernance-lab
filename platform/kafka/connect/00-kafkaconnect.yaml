@@ -1,0 +1,24 @@
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaConnect
+metadata:
+  name: socle-connect
+  labels:
+    strimzi.io/cluster: socle-kafka
+  annotations:
+    strimzi.io/use-connector-resources: "true"
+spec:
+  version: 4.1.1
+  replicas: 1
+  bootstrapServers: socle-kafka-kafka-bootstrap:9092
+  config:
+    group.id: socle-connect
+    offset.storage.topic: socle-connect-offsets
+    config.storage.topic: socle-connect-configs
+    status.storage.topic: socle-connect-status
+    config.storage.replication.factor: 1
+    offset.storage.replication.factor: 1
+    status.storage.replication.factor: 1
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    key.converter.schemas.enable: false
+    value.converter.schemas.enable: false

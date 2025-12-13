@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kafka-metrics
+  namespace: kafka
+  labels:
+    monitoring: kafka
+spec:
+  selector:
+    matchLabels:
+      strimzi.io/cluster: socle-kafka
+  namespaceSelector:
+    matchNames:
+      - kafka
+  endpoints:
+    - port: tcp-prometheus
+      interval: 30s
+      scrapeTimeout: 10s

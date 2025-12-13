@@ -1,0 +1,29 @@
+# Exemple MM2 (à adapter) – nécessite deux clusters Kafka et credentials/ACLs
+# Documentation Strimzi: config MirrorMaker2 + ACLs dédiées.
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaMirrorMaker2
+metadata:
+  name: mm2-demo
+spec:
+  version: 4.1.1
+  replicas: 1
+  connectCluster: "target"
+  clusters:
+    - alias: "source"
+      bootstrapServers: source-kafka-kafka-bootstrap:9092
+    - alias: "target"
+      bootstrapServers: target-kafka-kafka-bootstrap:9092
+  mirrors:
+    - sourceCluster: "source"
+      targetCluster: "target"
+      sourceConnector:
+        config:
+          replication.factor: 1
+      checkpointConnector:
+        config:
+          checkpoints.topic.replication.factor: 1
+      heartbeatConnector:
+        config:
+          heartbeats.topic.replication.factor: 1
+      topicsPattern: "demo\..*"
+      groupsPattern: ".*"
