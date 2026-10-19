@@ -12,6 +12,12 @@ Ce dépôt est un **projet réalisable** (portfolio + CV) : il vous guide pour c
 > Implémentation de référence : **Strimzi** (Kafka on Kubernetes/OpenShift).  
 > OpenShift : Strimzi est aussi distribué via Red Hat Streams for Apache Kafka (AMQ Streams).
 
+## Audit Kafka consolidé — 19 octobre 2026
+
+[**Consulter l'audit et le plan de modernisation Kafka/OpenShift**](docs/KAFKA_AUDIT_CONSOLIDE_ET_PLAN_MODERNISATION_2026-10-19.md).
+
+Ce document centralise les constats vérifiés, la dette Kafka 4.x / Strimzi / KRaft, les responsabilités KafkaOps et Instant Payments, et les critères de remédiation. Il conserve l'apport utile de l'ancien laboratoire `mayabank-kafka-ddd-openshift` **sans dupliquer ses quatre rapports**. **Aucun manifeste ni runtime n'a été corrigé/testé par cette consolidation.**
+
 ---
 
 ## Démarrage rapide (Kubernetes)
